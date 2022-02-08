@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ebutler/Screens/UserScreen/adduser_screen.dart';
+import 'package:ebutler/Services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class _ListUserState extends State<ListUser> {
               stream: Firestore.instance.collection('users').snapshots(),
               builder: (context, snapshot) {
                 if(!snapshot.hasData){
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
@@ -33,7 +34,7 @@ class _ListUserState extends State<ListUser> {
                   headingRowColor: MaterialStateColor.resolveWith((states) => Colors.grey),
                   showBottomBorder: true,
                   dataRowHeight: 80,
-                  columns: [
+                  columns: const [
                     DataColumn(label: Text('Name', style: TextStyle(fontWeight: FontWeight.bold))),
                     DataColumn(label: Text('Email', style: TextStyle(fontWeight: FontWeight.bold))),
                     DataColumn(label: Text('')), //delete 
@@ -53,7 +54,7 @@ class _ListUserState extends State<ListUser> {
           //menuju ke page "Add Product"
           Navigator.push(context, MaterialPageRoute(builder: (context) => AddUser(),));
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
 
     );
@@ -76,9 +77,16 @@ class _ListUserState extends State<ListUser> {
           highlightColor: Colors.orange[100],
           splashColor: Colors.green[100],
           onPressed: () async {
-            collectionReference.document(data.documentID).delete();
+            await AuthenticationService().deleteUser(data['email'], data['password']).whenComplete(() {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("User deleted successfully!"), 
+                  backgroundColor: Colors.greenAccent
+                )
+              );
+            });
           }, 
-          icon: Icon(Icons.delete, color: Colors.white, size: 20.0,),
+          icon: const Icon(Icons.delete, color: Colors.white, size: 20.0,),
         ),
       )),
     ]);

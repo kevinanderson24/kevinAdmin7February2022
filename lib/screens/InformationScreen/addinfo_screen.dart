@@ -38,7 +38,7 @@ class _AddInformationState extends State<AddInformation> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
-        title: Text("Add Information", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text("Add Information", style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -98,7 +98,7 @@ class _AddInformationState extends State<AddInformation> {
                         onPressed: (){
                           checkForm(context);
                         },
-                        child: Text(
+                        child: const Text(
                           "Save",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),

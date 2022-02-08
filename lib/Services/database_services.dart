@@ -2,14 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ebutler/model/product_model.dart';
 
 class DatabaseServices{
-  final String id;
-  DatabaseServices({this.id});
-  //--------- PRODUCT -----------------------//
+  final String uid;
+  DatabaseServices({this.uid});
+
+  final CollectionReference userCollection =
+    Firestore.instance.collection('users');
+
   final CollectionReference productCollection =
     Firestore.instance.collection('product');
 
   final CollectionReference informationCollection =
     Firestore.instance.collection('information');
+  
+  Future deleteUser(){
+    return userCollection.document(uid).delete();
+  }
 
   List<Product> _productSnapshot(QuerySnapshot snapshot){
     return snapshot.documents.map((doc) {
@@ -26,6 +33,6 @@ class DatabaseServices{
   Stream<List<Product>> get productStream {
     return productCollection.snapshots().map(_productSnapshot);
   }
-  //---------------------- END of PRODUCT ----------------------------//
+
 
 }

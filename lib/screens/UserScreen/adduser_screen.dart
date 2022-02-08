@@ -37,7 +37,7 @@ class _AddUserState extends State<AddUser> {
         alignment: Alignment.bottomCenter,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
+          decoration: const BoxDecoration(color: Colors.white, boxShadow: [
             BoxShadow(
                 color: Colors.black12,
                 offset: Offset(-5, 0),
@@ -73,6 +73,7 @@ class _AddUserState extends State<AddUser> {
                           if(!regex.hasMatch(value)){
                             return ("Enter valid first name(Min. 3 Characters)");
                           }
+                          return null;
                         },
                       ),
                       TextFormField(
@@ -105,7 +106,7 @@ class _AddUserState extends State<AddUser> {
                         controller: passwordController,
                         obscureText: true,
                         textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(hintText: "Password"),
+                        decoration: const InputDecoration(hintText: "Password"),
                         validator: (value) {
                           RegExp regex = new RegExp(r'^.{6,}$');
 
@@ -131,13 +132,14 @@ class _AddUserState extends State<AddUser> {
                           if (passwordController.text != value) {
                             return ("Password don't match !");
                           }
+                          return null;
                         },
                         onSaved: (value) {
                           confirmPasswordController.text = value;
                         },
                         textInputAction: TextInputAction.done,
                         decoration:
-                            InputDecoration(hintText: "Confirm Password"),
+                            const InputDecoration(hintText: "Confirm Password"),
                       ),
                     ],
                   ),
@@ -162,34 +164,6 @@ class _AddUserState extends State<AddUser> {
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () async{
-                    // if(_formkey.currentState.validate() == true){
-                    //   try {
-                    //     AuthenticationService.signUp(emailController.text, passwordController.text).then((value) async {
-                    //       FirebaseUser user = await _auth.currentUser();
-
-                    //       await Firestore.instance.collection("users").document(user.uid).setData({
-                    //         'uid': user.uid,
-                    //         'email': emailController.text,
-                    //         'name': nameController.text,
-                    //         'password': passwordController.text,
-                    //       });
-                    //       _formkey.currentState.reset();
-                    //       Scaffold.of(context).showSnackBar(SnackBar(content: Text("Account created successfully!")));
-                    //     });
-                    //   } catch (signUpError) {
-                    //     if(signUpError is PlatformException){
-                    //       if(signUpError == "ERROR_EMAIL_ALREADY_USE"){
-                    //         Fluttertoast.showToast(msg: "Email already exists!");
-                    //       }else if(signUpError == "ERROR_INVALID_EMAIL"){
-                    //         Fluttertoast.showToast(msg: "Email invalid!");
-                    //       }else if(signUpError == "ERROR_WEAK_PASSWORD"){
-                    //         Fluttertoast.showToast(msg: "Password is weak!");
-                    //       }
-                    //     }
-                    //   }
-                    // }else if(_formkey.currentState.validate() == false){
-                    //   Fluttertoast.showToast(msg: "Make sure there's no error in every field!");
-                    // }
                     if (_formkey.currentState.validate() == true) {
                       AuthenticationService.signUp(
                           emailController.text, passwordController.text).then((value) async {
@@ -204,11 +178,11 @@ class _AddUserState extends State<AddUser> {
                             });
                             // _formkey.currentState.reset();
                             Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Account created successfully!"), backgroundColor: Colors.greenAccent, ));
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Account created successfully!"), backgroundColor: Colors.greenAccent, ));
                           });
                     } else if (_formkey.currentState.validate() == false) {
                       Fluttertoast.showToast(
-                          msg: "Make sure everything theres no error !");
+                          msg: "Make sure everything theres no error !", textColor: Colors.red);
                     }
                   },
                 ),

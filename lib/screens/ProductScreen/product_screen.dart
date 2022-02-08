@@ -14,60 +14,6 @@ class ListProduct extends StatefulWidget {
 
 class _ListProductState extends State<ListProduct> {
   CollectionReference collectionReference = Firestore.instance.collection('product');
-  // int _currentSortColumn = 0;
-  // bool isAscending = true;
-
-  // onSortId(int columnIndex, bool ascending){
-  //   List<DocumentSnapshot> snapshot;
-  //   setState(() {
-  //     _currentSortColumn = columnIndex;
-  //     if(isAscending == true){
-  //       //sort the product list in Ascending, order by ID
-  //       snapshot.sort((productA, productB) =>
-  //         productB['id'].compareTo(productA['id']));
-  //     }else{
-  //       isAscending = true;
-  //       // sort the product list in Descending, order by Price
-  //       snapshot.sort((productA, productB) =>
-  //       productA['id'].compareTo(productB['id']));
-  //     }
-  //   });
-  // }
-
-  // onSortName(int columnIndex, bool ascending){
-  //   List<DocumentSnapshot> snapshot;
-  //   setState(() {
-  //     _currentSortColumn = columnIndex;
-  //     if(isAscending == true){
-  //       isAscending = false;
-  //       //sort the product list in Ascending, order by ID
-  //       snapshot.sort((productA, productB) =>
-  //         productB['name'].compareTo(productA['name']));
-  //     }else{
-  //       isAscending = true;
-  //       // sort the product list in Descending, order by Price
-  //       snapshot.sort((productA, productB) =>
-  //       productA['name'].compareTo(productB['name']));
-  //     }
-  //   });
-  // }
-
-  // onSortPrice(int columnIndex, bool ascending){
-  //   List<DocumentSnapshot> snapshot;
-  //   setState(() {
-  //     _currentSortColumn = columnIndex;
-  //     if(isAscending == true){
-  //       //sort the product list in Ascending, order by ID
-  //       snapshot.sort((productA, productB) =>
-  //         productB['price'].compareTo(productA['price']));
-  //     }else{
-  //       isAscending = true;
-  //       // sort the product list in Descending, order by Price
-  //       snapshot.sort((productA, productB) =>
-  //       productA['price'].compareTo(productB['price']));
-  //     }
-  //   });
-  // }
   
   @override
   Widget build(BuildContext context) {
@@ -80,13 +26,13 @@ class _ListProductState extends State<ListProduct> {
               stream: collectionReference.snapshots(),
               builder: (context, snapshot) {
                 if(!snapshot.hasData){
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
 
                 return DataTable(
-                  dataTextStyle: TextStyle(fontSize: 12, color: Colors.black),
+                  dataTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
                   headingRowColor: MaterialStateColor.resolveWith((states) => Colors.grey),
                   showBottomBorder: true,
                   dataRowHeight: 130,
@@ -190,7 +136,7 @@ class _ListProductState extends State<ListProduct> {
             );
             Navigator.of(context).push(route);
           }, 
-          icon: Icon(Icons.update, color: Colors.white, size: 20.0,),
+          icon: const Icon(Icons.update, color: Colors.white, size: 20.0,),
         ),
       )),
 
@@ -205,6 +151,7 @@ class _ListProductState extends State<ListProduct> {
           highlightColor: Colors.orange[100],
           splashColor: Colors.green[100],
           onPressed: () async {
+            //delete image from Firebase Storage
             if(data['url'] != null){
               StorageReference storageReference = 
                 await FirebaseStorage.instance.getReferenceFromUrl(data['url']);
@@ -213,18 +160,20 @@ class _ListProductState extends State<ListProduct> {
               await storageReference.delete();
               print('image deleted');
             }
-            await collectionReference.document(data['id']).delete();
+            //--------------------------------------------------//
+
+            await collectionReference.document(data['id']).delete().whenComplete(() {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Product deleted successfully!"), 
+                backgroundColor: Colors.greenAccent
+                )
+              );
+            });
           }, 
-          icon: Icon(Icons.delete, color: Colors.white, size: 20.0,),
+          icon: const Icon(Icons.delete, color: Colors.white, size: 20.0,),
         ),
       )),
     ]);
   }
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   getData();
-  // }
 }

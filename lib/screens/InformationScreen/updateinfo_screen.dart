@@ -39,7 +39,7 @@ class _UpdateInformationState extends State<UpdateInformation> {
       'description': descriptionController.text,
     });
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Information updated successfully!"), backgroundColor: Colors.greenAccent));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Information updated successfully!"), backgroundColor: Colors.greenAccent));
   }
 
   @override
@@ -47,7 +47,7 @@ class _UpdateInformationState extends State<UpdateInformation> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
-        title: Text("Update Information", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text("Update Information", style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
         child: Container(

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\admin_product_test\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-in\\values-in.xml",
+            "outputFile": "D:\\GitHub\\kevinAdmin7February2022\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-in\\values-in.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Kevin Anderson\\.gradle\\caches\\transforms-2\\files-2.1\\e31537fb3ca3accaea0d4d9ddb9631cc\\jetified-play-services-basement-17.0.0\\res\\values-in\\values.xml",

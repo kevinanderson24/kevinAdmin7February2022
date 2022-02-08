@@ -53,16 +53,7 @@ class _AddProductState extends State<AddProduct> {
   checkForm(BuildContext context) {
     final key = _formkey.currentState;
     if(key.validate() && image != null){
-      // checkExistsProduct(context);
-      uploadImageToFirebaseStorage(context).whenComplete(() {
-      //     // setState(() {
-      //     //   image = null;
-      //     // });
-      //     // idController.text = '';
-      //     // nameController.text = '';
-      //     // priceController.text = '';
-      //     // descriptionController.text = '';
-      });
+      uploadImageToFirebaseStorage(context);
     }else if(key.validate() == true && image == null){
       Fluttertoast.showToast(
         msg: "Image must be selected",
@@ -102,7 +93,7 @@ class _AddProductState extends State<AddProduct> {
     });
 
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product added successfully!"), backgroundColor: Colors.greenAccent));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Product added successfully!"), backgroundColor: Colors.greenAccent));
   }
 
 
@@ -118,7 +109,7 @@ class _AddProductState extends State<AddProduct> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
-        title: Text("Add Product", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text("Add Product", style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -161,7 +152,7 @@ class _AddProductState extends State<AddProduct> {
                         }
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     //------------------ NAME ------------------------------------//
                     TextFormField(
                       controller: nameController,
@@ -181,7 +172,7 @@ class _AddProductState extends State<AddProduct> {
                         nameController.text = newValue;
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     //------------------------- PRICE -------------------------------//
                     TextFormField(
                       controller: priceController,
@@ -202,7 +193,7 @@ class _AddProductState extends State<AddProduct> {
                       },
                       onSaved: (newValue) => priceController.text = newValue,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     //---------------------- DESCRIPTION------------------------------//
                     TextFormField(
                       controller: descriptionController,
@@ -222,7 +213,7 @@ class _AddProductState extends State<AddProduct> {
                       },
                       onSaved: (newValue) => descriptionController.text = newValue,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Container(
                       child: Row(
                         children: [
@@ -241,13 +232,13 @@ class _AddProductState extends State<AddProduct> {
                               shape: BoxShape.rectangle,
                               border: Border.all(color: Colors.black)
                             ),
-                            child: Text("No Image Selected", style: TextStyle(fontSize: 12)),
+                            child: const Text("No Image Selected", style: TextStyle(fontSize: 12)),
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           Container(
                             width: 170,
                             child: ElevatedButton.icon(
-                              label: Text(
+                              label: const Text(
                                 "Select Image", 
                                 textAlign: TextAlign.center, 
                                 style: TextStyle(
@@ -255,7 +246,7 @@ class _AddProductState extends State<AddProduct> {
                                   fontWeight: FontWeight.bold
                                 )
                               ),
-                              icon: Icon(Icons.add_photo_alternate),
+                              icon: const Icon(Icons.add_photo_alternate),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.greenAccent, //background color
                                 onPrimary: Colors.white, //foreground color
@@ -272,7 +263,7 @@ class _AddProductState extends State<AddProduct> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Material(
                       elevation: 5,
                       borderRadius: BorderRadius.circular(10),
@@ -286,7 +277,7 @@ class _AddProductState extends State<AddProduct> {
                             idCheck = true;
                           });
                         },
-                        child: Text(
+                        child: const Text(
                           "Submit",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),

@@ -116,13 +116,13 @@ class _State extends State<UpdateProduct> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
-        title: Text("Update Product", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text("Update Product", style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: Form(
         key: _formkey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           children: [
             Column(
               children: [
@@ -143,14 +143,12 @@ class _State extends State<UpdateProduct> {
                       : Image.network(currentUrl)
                   )
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 TextFormField(
                   controller: _idProductController,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     label: Text('Product Id'),
                   ),
                   // validator: (value) {
@@ -166,7 +164,7 @@ class _State extends State<UpdateProduct> {
                   controller: _nameProductController,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     label: Text('Product Name'),
                   ),
                   validator: (value) {
@@ -186,7 +184,7 @@ class _State extends State<UpdateProduct> {
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     label: Text('Product Price'),
                   ),
                   validator: (value) {
@@ -203,25 +201,24 @@ class _State extends State<UpdateProduct> {
                   minLines: 3,
                   maxLines: 3,
                   textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     label: Text('Product Desciption'),
                   ),
                   validator: (value) {
                     if(value.isEmpty){
                       return ("This field must be filled");
                     }
+                    return null;
                   },
                   onSaved: (newValue) => _descriptionProductController.text = newValue,
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 Material(
                   elevation: 30,
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.blue[900],
                   child: MaterialButton(
-                    padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+                    padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
                     minWidth: MediaQuery.of(context).size.width,
                     onPressed: () {
                       checkForm(context);

@@ -20,7 +20,7 @@ class _InformationScreenState extends State<InformationScreen> {
         stream: collectionReference.snapshots(),
         builder: (context, snapshot) {
           if(!snapshot.hasData){
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -74,7 +74,7 @@ class _InformationScreenState extends State<InformationScreen> {
           //menuju ke page "Add Product"
           Navigator.push(context, MaterialPageRoute(builder: (context) => AddInformation()));
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
