@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ebutler/model/product_model.dart';
+import 'package:flutter/cupertino.dart';
 
 class DatabaseServices{
   final String uid;
@@ -17,6 +18,16 @@ class DatabaseServices{
   Future deleteUser(){
     return userCollection.document(uid).delete();
   }
+
+  // Future addUser(String uid, String email, String name, String password, Timestamp timestamp) async {
+  //   return await userCollection.document(uid).setData({
+  //     'uid': uid,
+  //     'email': email,
+  //     'name': name,
+  //     'password': password,
+  //     'timestamp': Timestamp.now(),
+  //   });
+  // }
 
   List<Product> _productSnapshot(QuerySnapshot snapshot){
     return snapshot.documents.map((doc) {

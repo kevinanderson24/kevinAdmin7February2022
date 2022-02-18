@@ -90,8 +90,8 @@ class _AddProductState extends State<AddProduct> {
       'price': int.tryParse(priceController.text),
       'description': descriptionController.text,
       'url': downloadURL,
+      'createdAt': Timestamp.now(),
     });
-
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Product added successfully!"), backgroundColor: Colors.greenAccent));
   }

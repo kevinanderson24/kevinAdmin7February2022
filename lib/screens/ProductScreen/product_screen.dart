@@ -23,7 +23,7 @@ class _ListProductState extends State<ListProduct> {
           Container(
             width: MediaQuery.of(context).size.width,
             child: StreamBuilder<QuerySnapshot>(
-              stream: collectionReference.snapshots(),
+              stream: collectionReference.orderBy('createdAt', descending: false).snapshots(),
               builder: (context, snapshot) {
                 if(!snapshot.hasData){
                   return const Center(
@@ -166,7 +166,7 @@ class _ListProductState extends State<ListProduct> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Product deleted successfully!"), 
-                backgroundColor: Colors.greenAccent
+                backgroundColor: Colors.redAccent
                 )
               );
             });

@@ -25,6 +25,7 @@ class _AddUserState extends State<AddUser> {
       new TextEditingController(); //controller
   final TextEditingController confirmPasswordController =
       new TextEditingController(); //controller
+  static FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -163,27 +164,61 @@ class _AddUserState extends State<AddUser> {
                         fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
-                  onPressed: () async{
-                    if (_formkey.currentState.validate() == true) {
-                      AuthenticationService.signUp(
-                          emailController.text, passwordController.text).then((value) async {
-                            FirebaseUser user = await _auth.currentUser();
-
-
-                            await Firestore.instance.collection("users").document(user.uid).setData({
-                              'uid': user.uid,
-                              'email': emailController.text,
-                              'name': nameController.text,
-                              'password': passwordController.text,
-                            });
-                            // _formkey.currentState.reset();
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Account created successfully!"), backgroundColor: Colors.greenAccent, ));
-                          });
-                    } else if (_formkey.currentState.validate() == false) {
-                      Fluttertoast.showToast(
-                          msg: "Make sure everything theres no error !", textColor: Colors.red);
+                  onPressed: () async {
+                    final key = _formkey.currentState;
+                    if (key.validate()) {
+                      try {
+                        AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+                        FirebaseUser user = result.user;
+                        await Firestore.instance.collection("users").document(user.uid).setData({
+                          'uid': user.uid,
+                          'email': emailController.text,
+                          'name': nameController.text,
+                          'password': passwordController.text,
+                          'createdAt': Timestamp.now()
+                        });
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Account created successfully!"), 
+                            backgroundColor: Colors.greenAccent
+                          )
+                        );
+                      } on Exception catch (e) {
+                        // TODO
+                        print(e.toString());
+                        Fluttertoast.showToast(msg: e.toString());
+                      }
+                    } else {
+                      Fluttertoast.showToast(msg: "Make sure theres no error!", textColor: Colors.red);
                     }
+                    // if (_formkey.currentState.validate() == true) {
+                    //   AuthenticationService.signUp(
+                    //       emailController.text, passwordController.text).then((value) async {
+                    //         FirebaseUser user = await _auth.currentUser();
+
+                    //         if(emailController.text == EmailAuthProvider.getCredential(email: emailController.text)){
+                    //           Fluttertoast.showToast(msg: "email sama ... ganti yang lain");
+                    //         }else{
+                    //           Fluttertoast.showToast(msg: "email berhasil di daftarkan");
+                    //         }
+
+
+                    //         // await Firestore.instance.collection("users").document(user.uid).setData({
+                    //         //   'uid': user.uid,
+                    //         //   'email': emailController.text,
+                    //         //   'name': nameController.text,
+                    //         //   'password': passwordController.text,
+                    //         //   'timestamp': Timestamp.now(),
+                    //         // });
+                    //         // // _formkey.currentState.reset();
+                    //         // Navigator.pop(context);
+                    //         // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Account created successfully!"), backgroundColor: Colors.greenAccent, ));
+                    //       });
+                    // } else if (_formkey.currentState.validate() == false) {
+                    //   Fluttertoast.showToast(
+                    //       msg: "Make sure everything theres no error !", textColor: Colors.red);
+                    // }
                   },
                 ),
               ),

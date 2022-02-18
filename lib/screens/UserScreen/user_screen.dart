@@ -14,6 +14,7 @@ class ListUser extends StatefulWidget {
 class _ListUserState extends State<ListUser> {
   CollectionReference collectionReference = Firestore.instance.collection('users');
   FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +23,7 @@ class _ListUserState extends State<ListUser> {
           Container(
             // width: MediaQuery.of(context).size.width,
             child: StreamBuilder<QuerySnapshot>(
-              stream: Firestore.instance.collection('users').snapshots(),
+              stream: Firestore.instance.collection('users').orderBy('createdAt', descending: false).snapshots(),
               builder: (context, snapshot) {
                 if(!snapshot.hasData){
                   return const Center(
@@ -81,7 +82,7 @@ class _ListUserState extends State<ListUser> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("User deleted successfully!"), 
-                  backgroundColor: Colors.greenAccent
+                  backgroundColor: Colors.redAccent
                 )
               );
             });
@@ -91,4 +92,8 @@ class _ListUserState extends State<ListUser> {
       )),
     ]);
   }
+}
+
+class OrderBy{
+  String status;
 }
