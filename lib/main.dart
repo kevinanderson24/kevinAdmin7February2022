@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
               child: Scaffold(
                 appBar: AppBar(
                   backgroundColor: Colors.blue[900],
-                  title: Text(
+                  title: const Text(
                     "Binus Hotel",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),

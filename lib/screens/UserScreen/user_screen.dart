@@ -82,7 +82,7 @@ class _ListUserState extends State<ListUser> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("User deleted successfully!"), 
-                  backgroundColor: Colors.redAccent
+                  backgroundColor: Colors.greenAccent
                 )
               );
             });

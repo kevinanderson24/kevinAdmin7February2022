@@ -67,15 +67,6 @@ class _InformationScreenState extends State<InformationScreen> {
           );
         },
       ),
-      //--------------------- BUTTON (+) ----------------------//
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blueAccent,
-        onPressed: () {
-          //menuju ke page "Add Product"
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddInformation()));
-        },
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

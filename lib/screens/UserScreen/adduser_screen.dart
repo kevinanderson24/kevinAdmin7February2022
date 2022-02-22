@@ -190,7 +190,7 @@ class _AddUserState extends State<AddUser> {
                         Fluttertoast.showToast(msg: e.toString());
                       }
                     } else {
-                      Fluttertoast.showToast(msg: "Make sure theres no error!", textColor: Colors.red);
+                      Fluttertoast.showToast(msg: "Please! Make sure theres no error.", textColor: Colors.red);
                     }
                     // if (_formkey.currentState.validate() == true) {
                     //   AuthenticationService.signUp(

@@ -166,7 +166,7 @@ class _ListProductState extends State<ListProduct> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Product deleted successfully!"), 
-                backgroundColor: Colors.redAccent
+                backgroundColor: Colors.greenAccent
                 )
               );
             });
