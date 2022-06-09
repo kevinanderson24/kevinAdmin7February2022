@@ -11,15 +11,15 @@ class StatusScreen extends StatefulWidget {
   _StatusScreenState createState() => _StatusScreenState();
 }
 
+final _formKey = GlobalKey<FormState>();
+
 class _StatusScreenState extends State<StatusScreen> {
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-
     String uid;
     return Scaffold(
       body: StreamBuilder(
-          stream: Firestore.instance.collection('Status').snapshots(),
+          stream: FirebaseFirestore.instance.collection('Status').snapshots(),
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot> snapshotStatus) {
             if (!snapshotStatus.hasData) {
@@ -27,23 +27,22 @@ class _StatusScreenState extends State<StatusScreen> {
                 child: CircularProgressIndicator(),
               );
             }
-            if (snapshotStatus.data.documents.isEmpty) {
+            if (snapshotStatus.data.docs.isEmpty) {
               return Center(
                 child: Text('No Order yet'),
               );
             }
 
             // print(snapshotStatus.data.documents.length);
-            var statusData = snapshotStatus.data.documents
-                .map((stat) => stat['Status'])
-                .toList();
-            var uidData = snapshotStatus.data.documents
+            var statusData =
+                snapshotStatus.data.docs.map((stat) => stat['Status']).toList();
+            var uidData = snapshotStatus.data.docs
                 .map((stat) => stat['User Id'])
                 .toList();
-            var roomData = snapshotStatus.data.documents
+            var roomData = snapshotStatus.data.docs
                 .map((stat) => stat['Room Number'])
                 .toList();
-            var timeData = snapshotStatus.data.documents
+            var timeData = snapshotStatus.data.docs
                 .map(
                   (stat) => stat['Time'],
                 )
@@ -88,12 +87,13 @@ class _StatusScreenState extends State<StatusScreen> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-                          Firestore.instance
+                          FirebaseFirestore.instance
                               .collection('Status')
-                              .document(uid)
-                              .updateData({
+                              .doc(uid)
+                              .update({
                             'Status': 'Order is being prepared',
                           });
+
                           _formKey.currentState.reset();
                         }
                       },
@@ -105,12 +105,13 @@ class _StatusScreenState extends State<StatusScreen> {
                     ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
-                            Firestore.instance
+                            FirebaseFirestore.instance
                                 .collection('Status')
-                                .document(uid)
-                                .updateData({
+                                .doc(uid)
+                                .update({
                               'Status': 'Order is on the way',
                             });
+
                             _formKey.currentState.reset();
                           }
                         },
@@ -121,14 +122,14 @@ class _StatusScreenState extends State<StatusScreen> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-                          Firestore.instance
+                          FirebaseFirestore.instance
                               .collection('Cart')
-                              .document(uid)
+                              .doc(uid)
                               .delete();
-                          Firestore.instance
+                          FirebaseFirestore.instance
                               .collection('Status')
-                              .document(uid)
-                              .updateData({
+                              .doc(uid)
+                              .update({
                             'Status': 'Order is finished',
                           });
                           _formKey.currentState.reset();
@@ -142,7 +143,7 @@ class _StatusScreenState extends State<StatusScreen> {
                     Column(
                       children: [
                         for (int i = 0;
-                            i < snapshotStatus.data.documents.length;
+                            i < snapshotStatus.data.docs.length;
                             i++)
                           Container(
                             padding: const EdgeInsets.all(10.0),

@@ -2,21 +2,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ebutler/model/product_model.dart';
 import 'package:flutter/cupertino.dart';
 
-class DatabaseServices{
+class DatabaseServices {
   final String uid;
   DatabaseServices({this.uid});
 
   final CollectionReference userCollection =
-    Firestore.instance.collection('users');
+      FirebaseFirestore.instance.collection('users');
 
   final CollectionReference productCollection =
-    Firestore.instance.collection('product');
+      FirebaseFirestore.instance.collection('product');
 
   final CollectionReference informationCollection =
-    Firestore.instance.collection('information');
-  
-  Future deleteUser(){
-    return userCollection.document(uid).delete();
+      FirebaseFirestore.instance.collection('information');
+
+  Future deleteUser() {
+    return userCollection
+        .orderBy(uid)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              element.reference.delete();
+            }));
   }
 
   // Future addUser(String uid, String email, String name, String password, Timestamp timestamp) async {
@@ -29,14 +34,14 @@ class DatabaseServices{
   //   });
   // }
 
-  List<Product> _productSnapshot(QuerySnapshot snapshot){
-    return snapshot.documents.map((doc) {
+  List<Product> _productSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
       return Product(
-        id: doc.data['id'] ?? 'id',
-        name: doc.data['name'] ?? 'name',
-        price: doc.data['price'] ?? 0,
-        description: doc.data['description'] ?? 'desc',
-        url: doc.data['url'] ?? 'url',
+        id: doc.data()['id'] ?? 'id',
+        name: doc.data()['name'] ?? 'name',
+        price: doc.data()['price'] ?? 0,
+        description: doc.data()['description'] ?? 'desc',
+        url: doc.data()['url'] ?? 'url',
       );
     }).toList();
   }
@@ -44,6 +49,4 @@ class DatabaseServices{
   Stream<List<Product>> get productStream {
     return productCollection.snapshots().map(_productSnapshot);
   }
-
-
 }

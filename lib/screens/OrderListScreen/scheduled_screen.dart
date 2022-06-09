@@ -22,7 +22,8 @@ class _ScheduledScreenState extends State<ScheduledScreen> {
 
     return Scaffold(
       body: StreamBuilder(
-        stream: Firestore.instance.collection('Scheduled Cart').snapshots(),
+        stream:
+            FirebaseFirestore.instance.collection('Scheduled Cart').snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot> snapshotScheduledCart) {
           if (!snapshotScheduledCart.hasData) {
@@ -30,7 +31,7 @@ class _ScheduledScreenState extends State<ScheduledScreen> {
               child: Text('FeelsWeirdMan'),
             );
           }
-          if (snapshotScheduledCart.data.documents.isEmpty) {
+          if (snapshotScheduledCart.data.docs.isEmpty) {
             return Center(
               child: Text('No Scheduled Order yet'),
             );
@@ -64,13 +65,13 @@ class _ScheduledScreenState extends State<ScheduledScreen> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-                          Firestore.instance
+                          FirebaseFirestore.instance
                               .collection('Scheduled Cart')
-                              .document(uid)
+                              .doc(uid)
                               .delete();
-                          Firestore.instance
+                          FirebaseFirestore.instance
                               .collection('Scheduled Status')
-                              .document(uid)
+                              .doc(uid)
                               .delete();
                           _formKey.currentState.reset();
                         }
@@ -85,12 +86,12 @@ class _ScheduledScreenState extends State<ScheduledScreen> {
               ),
               Expanded(
                 child: ListView(
-                  children: snapshotScheduledCart.data.documents.map((doc) {
+                  children: snapshotScheduledCart.data.docs.map((doc) {
                     roomNumber = null;
                     uid = null;
                     time = null;
 
-                    for (var i in doc.data.values) {
+                    for (var i in doc.data().values) {
                       roomNumber = i['Room Number'].toString();
                       uid = i['User Id'].toString();
                       time = i['Time'].toString();
@@ -123,7 +124,7 @@ class _ScheduledScreenState extends State<ScheduledScreen> {
                             ),
                             Column(
                               children: [
-                                for (var i in doc.data.values)
+                                for (var i in doc.data().values)
 
                                   // width: MediaQuery.of(context).size.width,
                                   Text(

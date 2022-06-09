@@ -8,38 +8,41 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-
 class UpdateProduct extends StatefulWidget {
   final Product value;
-  const UpdateProduct({ Key key, this.value}) : super(key: key);
+  const UpdateProduct({Key key, this.value}) : super(key: key);
 
   @override
   _State createState() => _State();
 }
 
 class _State extends State<UpdateProduct> {
-  final _formkey = GlobalKey<FormState>();//formkey
+  final _formkey = GlobalKey<FormState>(); //formkey
   File image;
   final imagePicker = ImagePicker();
   String currentUrl;
   String newURL;
   String fileName;
-  CollectionReference products = Firestore.instance.collection('product');
+  CollectionReference products =
+      FirebaseFirestore.instance.collection('product');
   Product productModel;
 
   TextEditingController _nameProductController;
   TextEditingController _priceProductController;
   TextEditingController _descriptionProductController;
-  TextEditingController _idProductController;//controller
+  TextEditingController _idProductController; //controller
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _idProductController = TextEditingController(text: "${widget.value.id}");
-    _nameProductController = TextEditingController(text: "${widget.value.name}");
-    _priceProductController = TextEditingController(text: "${widget.value.price}");
-    _descriptionProductController = TextEditingController(text: "${widget.value.description}");
+    _nameProductController =
+        TextEditingController(text: "${widget.value.name}");
+    _priceProductController =
+        TextEditingController(text: "${widget.value.price}");
+    _descriptionProductController =
+        TextEditingController(text: "${widget.value.description}");
     currentUrl = "${widget.value.url}";
   }
 
@@ -47,15 +50,15 @@ class _State extends State<UpdateProduct> {
     final form = _formkey.currentState;
     if (form.validate()) {
       form.save();
-      if(newURL == null){
+      if (newURL == null) {
         updateDataWithoutImageChanges(context);
       }
       uploadImageToFirebaseStorage(context);
-    }else{
+    } else {
       Fluttertoast.showToast(
         msg: "Please fill form field correctly! Make sure there's no error",
         textColor: Colors.red,
-        gravity: ToastGravity.CENTER,       
+        gravity: ToastGravity.CENTER,
       );
     }
   }
@@ -73,18 +76,17 @@ class _State extends State<UpdateProduct> {
   //adding that download url to our "Firestore database" in Firebase
   uploadImageToFirebaseStorage(BuildContext context) async {
     fileName = basename(image.path);
-    StorageReference ref =
+    final StorageRef =
         FirebaseStorage.instance.ref().child('product/$fileName');
-    StorageUploadTask uploadTask = ref.putFile(image);
-    StorageTaskSnapshot snapshot = await uploadTask.onComplete;
+    UploadTask uploadTask = StorageRef.putFile(image);
+    TaskSnapshot snapshot = await uploadTask;
     newURL = await snapshot.ref.getDownloadURL();
     updateDataWithImageChanges(context);
     print(newURL);
   }
 
-
   updateDataWithoutImageChanges(BuildContext context) async {
-    products.document(_idProductController.text).updateData({
+    products.doc(_idProductController.text).update({
       'name': _nameProductController.text,
       'price': int.parse(_priceProductController.text),
       'description': _descriptionProductController.text,
@@ -93,11 +95,13 @@ class _State extends State<UpdateProduct> {
       newURL = null;
     });
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product updated successfully!"), backgroundColor: Colors.greenAccent));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Product updated successfully!"),
+        backgroundColor: Colors.greenAccent));
   }
 
   updateDataWithImageChanges(BuildContext context) async {
-    products.document(_idProductController.text).updateData({
+    products.doc(_idProductController.text).update({
       'name': _nameProductController.text,
       'price': int.parse(_priceProductController.text),
       'description': _descriptionProductController.text,
@@ -107,16 +111,18 @@ class _State extends State<UpdateProduct> {
       newURL = null;
     });
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product updated successfully!"), backgroundColor: Colors.greenAccent));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Product updated successfully!"),
+        backgroundColor: Colors.greenAccent));
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
-        title: const Text("Update Product", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text("Update Product",
+            style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: Form(
         key: _formkey,
@@ -127,22 +133,18 @@ class _State extends State<UpdateProduct> {
             Column(
               children: [
                 Container(
-                  height: 300.0,
-                  child: InkWell(
-                    onTap: () {
-                      //KETIKA GAMBAR DIKLIK
-                      pickImage();
-                    },
-                    child:
-                      (image != null)
-                      ? Image.file(
-                        image,
-                        fit: BoxFit.cover,
-
-                      )
-                      : Image.network(currentUrl)
-                  )
-                ),
+                    height: 300.0,
+                    child: InkWell(
+                        onTap: () {
+                          //KETIKA GAMBAR DIKLIK
+                          pickImage();
+                        },
+                        child: (image != null)
+                            ? Image.file(
+                                image,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(currentUrl))),
                 const SizedBox(height: 30),
                 TextFormField(
                   controller: _idProductController,
@@ -168,7 +170,7 @@ class _State extends State<UpdateProduct> {
                     label: Text('Product Name'),
                   ),
                   validator: (value) {
-                    if (value.isEmpty){
+                    if (value.isEmpty) {
                       return ("This field must be filled");
                     }
                     return null;
@@ -180,20 +182,19 @@ class _State extends State<UpdateProduct> {
                 TextFormField(
                   controller: _priceProductController,
                   keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     label: Text('Product Price'),
                   ),
                   validator: (value) {
-                    if(value.isEmpty){
+                    if (value.isEmpty) {
                       return ("This field must be filled");
                     }
                     return null;
                   },
-                  onSaved: (newValue) => _priceProductController.text = newValue,
+                  onSaved: (newValue) =>
+                      _priceProductController.text = newValue,
                 ),
                 TextFormField(
                   controller: _descriptionProductController,
@@ -205,12 +206,13 @@ class _State extends State<UpdateProduct> {
                     label: Text('Product Desciption'),
                   ),
                   validator: (value) {
-                    if(value.isEmpty){
+                    if (value.isEmpty) {
                       return ("This field must be filled");
                     }
                     return null;
                   },
-                  onSaved: (newValue) => _descriptionProductController.text = newValue,
+                  onSaved: (newValue) =>
+                      _descriptionProductController.text = newValue,
                 ),
                 const SizedBox(height: 20),
                 Material(
@@ -222,12 +224,13 @@ class _State extends State<UpdateProduct> {
                     minWidth: MediaQuery.of(context).size.width,
                     onPressed: () {
                       checkForm(context);
-                    },   
-                    child: const Text(
-                      "Submit",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Colors.white)
-                    ),
+                    },
+                    child: const Text("Submit",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 27,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
                   ),
                 ),
               ],

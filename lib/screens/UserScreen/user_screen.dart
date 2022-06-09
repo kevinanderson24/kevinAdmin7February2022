@@ -5,14 +5,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ListUser extends StatefulWidget {
-  const ListUser({ Key key }) : super(key: key);
+  const ListUser({Key key}) : super(key: key);
 
   @override
   _ListUserState createState() => _ListUserState();
 }
 
 class _ListUserState extends State<ListUser> {
-  CollectionReference collectionReference = Firestore.instance.collection('users');
+  CollectionReference collectionReference =
+      FirebaseFirestore.instance.collection('users');
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -23,24 +24,32 @@ class _ListUserState extends State<ListUser> {
           Container(
             // width: MediaQuery.of(context).size.width,
             child: StreamBuilder<QuerySnapshot>(
-              stream: Firestore.instance.collection('users').orderBy('createdAt', descending: false).snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .orderBy('createdAt', descending: false)
+                  .snapshots(),
               builder: (context, snapshot) {
-                if(!snapshot.hasData){
+                if (!snapshot.hasData) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
 
                 return DataTable(
-                  headingRowColor: MaterialStateColor.resolveWith((states) => Colors.grey),
+                  headingRowColor:
+                      MaterialStateColor.resolveWith((states) => Colors.grey),
                   showBottomBorder: true,
                   dataRowHeight: 80,
                   columns: const [
-                    DataColumn(label: Text('Name', style: TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text('Email', style: TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text('')), //delete 
+                    DataColumn(
+                        label: Text('Name',
+                            style: TextStyle(fontWeight: FontWeight.bold))),
+                    DataColumn(
+                        label: Text('Email',
+                            style: TextStyle(fontWeight: FontWeight.bold))),
+                    DataColumn(label: Text('')), //delete
                   ],
-                  rows: _buildList(context, snapshot.data.documents),
+                  rows: _buildList(context, snapshot.data.docs),
                 );
               },
             ),
@@ -53,14 +62,19 @@ class _ListUserState extends State<ListUser> {
         backgroundColor: Colors.blueAccent,
         onPressed: () {
           //menuju ke page "Add Product"
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddUser(),));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddUser(),
+              ));
         },
         child: const Icon(Icons.add),
       ),
-
     );
   }
-  List<DataRow> _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+
+  List<DataRow> _buildList(
+      BuildContext context, List<DocumentSnapshot> snapshot) {
     return snapshot.map((data) => _buildListItem(context, data)).toList();
   }
 
@@ -78,22 +92,25 @@ class _ListUserState extends State<ListUser> {
           highlightColor: Colors.orange[100],
           splashColor: Colors.green[100],
           onPressed: () async {
-            await AuthenticationService().deleteUser(data['email'], data['password']).whenComplete(() {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("User deleted successfully!"), 
-                  backgroundColor: Colors.greenAccent
-                )
-              );
+            await AuthenticationService()
+                .deleteUser(data['email'], data['password'])
+                .whenComplete(() {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("User deleted successfully!"),
+                  backgroundColor: Colors.greenAccent));
             });
-          }, 
-          icon: const Icon(Icons.delete, color: Colors.white, size: 20.0,),
+          },
+          icon: const Icon(
+            Icons.delete,
+            color: Colors.white,
+            size: 20.0,
+          ),
         ),
       )),
     ]);
   }
 }
 
-class OrderBy{
+class OrderBy {
   String status;
 }

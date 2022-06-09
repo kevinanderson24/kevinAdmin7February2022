@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -24,7 +21,7 @@ class _ReceiverState extends State<Receiver> {
 
     return Scaffold(
       body: StreamBuilder(
-        stream: Firestore.instance.collection('Cart').snapshots(),
+        stream: FirebaseFirestore.instance.collection('Cart').snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotCart) {
           if (!snapshotCart.hasData) {
@@ -32,7 +29,7 @@ class _ReceiverState extends State<Receiver> {
               child: Text('No Order yet'),
             );
           }
-          if (snapshotCart.data.documents.isEmpty) {
+          if (snapshotCart.data.docs.isEmpty) {
             return Center(
               child: Text('No Order yet'),
             );
@@ -65,12 +62,13 @@ class _ReceiverState extends State<Receiver> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-                          Firestore.instance
+                          FirebaseFirestore.instance
                               .collection('Status')
-                              .document(uid)
-                              .updateData({
+                              .doc(uid)
+                              .update({
                             'Status': 'Order is being prepared',
                           });
+
                           _formKey.currentState.reset();
                         }
                       },
@@ -82,12 +80,13 @@ class _ReceiverState extends State<Receiver> {
                     ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
-                            Firestore.instance
+                            FirebaseFirestore.instance
                                 .collection('Status')
-                                .document(uid)
-                                .updateData({
+                                .doc(uid)
+                                .update({
                               'Status': 'Order is on the way',
                             });
+
                             _formKey.currentState.reset();
                           }
                         },
@@ -98,14 +97,15 @@ class _ReceiverState extends State<Receiver> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-                          Firestore.instance
+                          FirebaseFirestore.instance
                               .collection('Cart')
-                              .document(uid)
+                              .doc(uid)
                               .delete();
-                          Firestore.instance
+
+                          FirebaseFirestore.instance
                               .collection('Status')
-                              .document(uid)
-                              .updateData({
+                              .doc(uid)
+                              .update({
                             'Status': 'Order is finished',
                           });
                           _formKey.currentState.reset();
@@ -121,12 +121,12 @@ class _ReceiverState extends State<Receiver> {
               ),
               Expanded(
                 child: ListView(
-                  children: snapshotCart.data.documents.map((doc) {
+                  children: snapshotCart.data.docs.map((doc) {
                     roomNumber = null;
                     uid = null;
                     time = null;
 
-                    for (var i in doc.data.values) {
+                    for (var i in doc.data().values) {
                       roomNumber = i['Room Number'].toString();
                       uid = i['User Id'].toString();
                       time = i['Time'].toString();
@@ -158,7 +158,7 @@ class _ReceiverState extends State<Receiver> {
                             ),
                             Column(
                               children: [
-                                for (var i in doc.data.values)
+                                for (var i in doc.data().values)
 
                                   // width: MediaQuery.of(context).size.width,
                                   Text(

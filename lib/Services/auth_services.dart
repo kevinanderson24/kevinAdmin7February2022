@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class AuthenticationService{
+class AuthenticationService {
   static FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   // static Future<FirebaseUser> signUp(String email, String password) async {
@@ -21,19 +21,20 @@ class AuthenticationService{
 
   Future deleteUser(String email, password) async {
     try {
-      AuthCredential credentials = EmailAuthProvider.getCredential(email: email, password: password);
+      AuthCredential credentials =
+          EmailAuthProvider.credential(email: email, password: password);
       // print(user);
-      AuthResult result = await _firebaseAuth.signInWithCredential(credentials);
+      UserCredential result =
+          await _firebaseAuth.signInWithCredential(credentials);
       await DatabaseServices(uid: result.user.uid).deleteUser();
       await result.user.delete();
       // await DatabaseServices(uid: result.user.uid).deleteUser();
       // await result.user.delete();
-      
+
       return true;
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
-  
 }

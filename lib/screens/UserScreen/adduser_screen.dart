@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class AddUser extends StatefulWidget {
   const AddUser({key}) : super(key: key);
 
@@ -32,7 +31,10 @@ class _AddUserState extends State<AddUser> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
-        title: Text("Add User", style: GoogleFonts.poppins(fontWeight: FontWeight.bold),),
+        title: Text(
+          "Add User",
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Align(
         alignment: Alignment.bottomCenter,
@@ -67,11 +69,11 @@ class _AddUserState extends State<AddUser> {
                         validator: (value) {
                           RegExp regex = new RegExp(r'^.{3,}$');
 
-                          if(value.isEmpty){
+                          if (value.isEmpty) {
                             return ("Name is required");
                           }
 
-                          if(!regex.hasMatch(value)){
+                          if (!regex.hasMatch(value)) {
                             return ("Enter valid first name(Min. 3 Characters)");
                           }
                           return null;
@@ -168,9 +170,15 @@ class _AddUserState extends State<AddUser> {
                     final key = _formkey.currentState;
                     if (key.validate()) {
                       try {
-                        AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-                        FirebaseUser user = result.user;
-                        await Firestore.instance.collection("users").document(user.uid).setData({
+                        UserCredential result =
+                            await _firebaseAuth.createUserWithEmailAndPassword(
+                                email: emailController.text,
+                                password: passwordController.text);
+                        User user = result.user;
+                        await FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(user.uid)
+                            .set({
                           'uid': user.uid,
                           'email': emailController.text,
                           'name': nameController.text,
@@ -179,18 +187,18 @@ class _AddUserState extends State<AddUser> {
                         });
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Account created successfully!"), 
-                            backgroundColor: Colors.greenAccent
-                          )
-                        );
+                            const SnackBar(
+                                content: Text("Account created successfully!"),
+                                backgroundColor: Colors.greenAccent));
                       } on Exception catch (e) {
                         // TODO
                         print(e.toString());
                         Fluttertoast.showToast(msg: e.toString());
                       }
                     } else {
-                      Fluttertoast.showToast(msg: "Please! Make sure theres no error.", textColor: Colors.red);
+                      Fluttertoast.showToast(
+                          msg: "Please! Make sure theres no error.",
+                          textColor: Colors.red);
                     }
                     // if (_formkey.currentState.validate() == true) {
                     //   AuthenticationService.signUp(
@@ -202,7 +210,6 @@ class _AddUserState extends State<AddUser> {
                     //         }else{
                     //           Fluttertoast.showToast(msg: "email berhasil di daftarkan");
                     //         }
-
 
                     //         // await Firestore.instance.collection("users").document(user.uid).setData({
                     //         //   'uid': user.uid,
