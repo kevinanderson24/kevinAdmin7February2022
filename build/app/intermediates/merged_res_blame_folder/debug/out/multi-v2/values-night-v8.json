@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Dell\\OneDrive - Bina Nusantara University\\Documents\\GitHub\\kevinAdmin7February2022\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
+            "outputFile": "D:\\GitHub\\kevinAdmin7February2022\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Dell\\OneDrive - Bina Nusantara University\\Documents\\GitHub\\kevinAdmin7February2022\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "D:\\GitHub\\kevinAdmin7February2022\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

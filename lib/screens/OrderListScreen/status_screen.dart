@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -93,7 +92,13 @@ class _StatusScreenState extends State<StatusScreen> {
                               .update({
                             'Status': 'Order is being prepared',
                           });
-
+                          FirebaseFirestore.instance
+                              .collection('Notification')
+                              .doc(uid)
+                              .set({
+                            'Status': 'Order is being prepared',
+                            'UID': uid,
+                          });
                           _formKey.currentState.reset();
                         }
                       },
@@ -111,7 +116,13 @@ class _StatusScreenState extends State<StatusScreen> {
                                 .update({
                               'Status': 'Order is on the way',
                             });
-
+                            FirebaseFirestore.instance
+                                .collection('Notification')
+                                .doc(uid)
+                                .set({
+                              'Status': 'Order is on the way',
+                              'UID': uid,
+                            });
                             _formKey.currentState.reset();
                           }
                         },
@@ -131,6 +142,13 @@ class _StatusScreenState extends State<StatusScreen> {
                               .doc(uid)
                               .update({
                             'Status': 'Order is finished',
+                          });
+                          FirebaseFirestore.instance
+                              .collection('Notification')
+                              .doc(uid)
+                              .set({
+                            'Status': 'Order is finished',
+                            'UID': uid,
                           });
                           _formKey.currentState.reset();
                         }

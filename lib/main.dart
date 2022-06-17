@@ -20,7 +20,6 @@ void main() async {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
-
   runApp(const MyApp());
 }
 
