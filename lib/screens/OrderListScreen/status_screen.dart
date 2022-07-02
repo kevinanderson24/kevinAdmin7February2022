@@ -109,6 +109,11 @@ class _StatusScreenState extends State<StatusScreen> {
                   (stat) => stat['Time'],
                 )
                 .toList();
+            var dateData = snapshotStatus.data.docs
+                .map(
+                  (stat) => stat['Date'],
+                )
+                .toList();
 
             return ListView(
               children: [
@@ -224,6 +229,8 @@ class _StatusScreenState extends State<StatusScreen> {
                                       style: GoogleFonts.poppins(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold)),
+                                  Text(dateData[i].toString(),
+                                      style: GoogleFonts.poppins(fontSize: 18)),
                                   Text(timeData[i].toString(),
                                       style: GoogleFonts.poppins(fontSize: 18))
                                 ],
