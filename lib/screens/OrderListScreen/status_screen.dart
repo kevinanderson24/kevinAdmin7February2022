@@ -1,18 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    'This channel is used for important notifications.', // description
-    importance: Importance.high,
-    playSound: true);
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 
 class StatusScreen extends StatefulWidget {
   const StatusScreen({key}) : super(key: key);
@@ -24,58 +13,6 @@ class StatusScreen extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 
 class _StatusScreenState extends State<StatusScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
-  }
-
-  void showNotificationOrderPrepared() {
-    flutterLocalNotificationsPlugin.show(
-        0,
-        'Status Order',
-        'Order is being prepared',
-        NotificationDetails(
-            android: AndroidNotificationDetails(
-                channel.id, channel.name, channel.description,
-                importance: Importance.high,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_launcher')));
-  }
-
-  void showNotificationOrderOTW() {
-    flutterLocalNotificationsPlugin.show(
-        0,
-        'Status Order',
-        'Order is on the way',
-        NotificationDetails(
-            android: AndroidNotificationDetails(
-                channel.id, channel.name, channel.description,
-                importance: Importance.high,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_launcher')));
-  }
-
-  void showNotificationOrderFinished() {
-    flutterLocalNotificationsPlugin.show(
-        0,
-        'Status Order',
-        'Order is finished',
-        NotificationDetails(
-            android: AndroidNotificationDetails(
-                channel.id, channel.name, channel.description,
-                importance: Importance.high,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_launcher')));
-  }
-
   @override
   Widget build(BuildContext context) {
     String uid;
@@ -118,7 +55,9 @@ class _StatusScreenState extends State<StatusScreen> {
             return ListView(
               children: [
                 AppBar(
-                  title: Text('Current Order Status'),
+                  title: Text('Current Order Status',
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+                  backgroundColor: Colors.blue[900],
                 ),
                 Form(
                   key: _formKey,
@@ -160,7 +99,6 @@ class _StatusScreenState extends State<StatusScreen> {
                               .update({
                             'Status': 'Order is being prepared',
                           });
-                          showNotificationOrderPrepared();
                           _formKey.currentState.reset();
                         }
                       },
@@ -178,7 +116,6 @@ class _StatusScreenState extends State<StatusScreen> {
                                 .update({
                               'Status': 'Order is on the way',
                             });
-                            showNotificationOrderOTW();
                             _formKey.currentState.reset();
                           }
                         },
@@ -199,7 +136,6 @@ class _StatusScreenState extends State<StatusScreen> {
                               .update({
                             'Status': 'Order is finished',
                           });
-                          showNotificationOrderFinished();
                           _formKey.currentState.reset();
                         }
                       },

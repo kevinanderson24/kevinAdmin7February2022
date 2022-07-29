@@ -17,7 +17,6 @@ class _ReceiverState extends State<Receiver> {
     bool visibility = true;
     String uid;
     String time;
-    final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
       body: StreamBuilder(
@@ -37,87 +36,9 @@ class _ReceiverState extends State<Receiver> {
           return Column(
             children: [
               AppBar(
-                title: Text('Current Orders'),
-              ),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(30.0),
-                      padding: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black)),
-                      child: TextFormField(
-                        decoration: const InputDecoration.collapsed(
-                            hintText: 'Input User ID'),
-                        textAlign: TextAlign.center,
-                        onChanged: (val) {
-                          uid = val;
-                        },
-                        validator: (val) =>
-                            val.isEmpty ? 'Enter User ID' : null,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          FirebaseFirestore.instance
-                              .collection('Status')
-                              .doc(uid)
-                              .update({
-                            'Status': 'Order is being prepared',
-                          });
-
-                          _formKey.currentState.reset();
-                        }
-                      },
-                      child: const Text('Order is being prepared'),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.red)),
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState.validate()) {
-                            FirebaseFirestore.instance
-                                .collection('Status')
-                                .doc(uid)
-                                .update({
-                              'Status': 'Order is on the way',
-                            });
-
-                            _formKey.currentState.reset();
-                          }
-                        },
-                        child: const Text('Order is on the way'),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.blue))),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          FirebaseFirestore.instance
-                              .collection('Cart')
-                              .doc(uid)
-                              .delete();
-
-                          FirebaseFirestore.instance
-                              .collection('Status')
-                              .doc(uid)
-                              .update({
-                            'Status': 'Order is finished',
-                          });
-                          _formKey.currentState.reset();
-                        }
-                      },
-                      child: const Text('Order finished'),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.green)),
-                    ),
-                  ],
-                ),
+                title: Text('Current Orders',
+                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+                backgroundColor: Colors.blue[900],
               ),
               Expanded(
                 child: ListView(

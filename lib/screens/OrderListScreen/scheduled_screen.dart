@@ -40,7 +40,9 @@ class _ScheduledScreenState extends State<ScheduledScreen> {
           return Column(
             children: [
               AppBar(
-                title: Text('Scheduled Order'),
+                title: Text('Scheduled Order',
+                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+                backgroundColor: Colors.blue[900],
               ),
               Form(
                 key: _formKey,

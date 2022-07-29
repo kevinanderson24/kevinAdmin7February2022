@@ -34,6 +34,7 @@ dependencies:
   firebase_storage: ^8.0.6
   #  firebase_messaging: ^9.1.4
   flutter_local_notifications: ^5.0.0+4
+  material_design_icons_flutter: ^5.0.6996
   flutter:
     sdk: flutter
   flutter_spinkit: ^5.1.0
