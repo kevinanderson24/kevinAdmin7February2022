@@ -17,6 +17,11 @@ class _StatusScreenState extends State<StatusScreen> {
   Widget build(BuildContext context) {
     String uid;
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Current Order Status',
+            style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.blue[900],
+      ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance.collection('Status').snapshots(),
           builder: (BuildContext context,
@@ -54,11 +59,6 @@ class _StatusScreenState extends State<StatusScreen> {
 
             return ListView(
               children: [
-                AppBar(
-                  title: Text('Current Order Status',
-                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
-                  backgroundColor: Colors.blue[900],
-                ),
                 Form(
                   key: _formKey,
                   child: Column(children: [
