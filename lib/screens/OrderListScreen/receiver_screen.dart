@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 class Receiver extends StatefulWidget {
   const Receiver({Key key}) : super(key: key);
@@ -24,11 +23,6 @@ class _ReceiverState extends State<Receiver> {
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotCart) {
           if (!snapshotCart.hasData) {
-            return Center(
-              child: Text('No Order yet'),
-            );
-          }
-          if (snapshotCart.data.docs.isEmpty) {
             return Center(
               child: Text('No Order yet'),
             );

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ebutler/Services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,16 +13,15 @@ class AddUser extends StatefulWidget {
 }
 
 class _AddUserState extends State<AddUser> {
-  final _auth = FirebaseAuth.instance; // authentication
   final _formkey = GlobalKey<FormState>(); //formkey
   final TextEditingController nameController =
-      new TextEditingController(); //controller
+      TextEditingController(); //controller
   final TextEditingController emailController =
-      new TextEditingController(); //controller
+      TextEditingController(); //controller
   final TextEditingController passwordController =
-      new TextEditingController(); //controller
+      TextEditingController(); //controller
   final TextEditingController confirmPasswordController =
-      new TextEditingController(); //controller
+      TextEditingController(); //controller
   static FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   @override
@@ -59,15 +57,19 @@ class _AddUserState extends State<AddUser> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
+                      //FORM "NAME"
                       TextFormField(
-                        autofocus: false,
+                        autofocus:
+                            false, //KALO DI ON dia bakal langsung di colomnya
                         controller: nameController,
                         keyboardType: TextInputType.name,
                         style: GoogleFonts.poppins(),
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(hintText: "Name"),
+                        textInputAction: TextInputAction
+                            .next, //kalo tekan "ENTER" dia bakal next kebawah
+                        decoration: const InputDecoration(hintText: "Name"),
                         validator: (value) {
-                          RegExp regex = new RegExp(r'^.{3,}$');
+                          RegExp regex =
+                              new RegExp(r'^.{3,}$'); //Minimal 3 characters
 
                           if (value.isEmpty) {
                             return ("Name is required");
@@ -78,17 +80,25 @@ class _AddUserState extends State<AddUser> {
                           }
                           return null;
                         },
+                        onSaved: (value) {
+                          nameController.text = value;
+                        },
                       ),
+                      //-----------------------------------------------------//
+
+                      //FORM "EMAIL"
                       TextFormField(
-                        autofocus: false,
+                        autofocus:
+                            false, //KALO DI ON dia bakal langsung di colomnya
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         style: GoogleFonts.poppins(),
-                        textInputAction: TextInputAction.next,
+                        textInputAction: TextInputAction
+                            .next, //kalo tekan "ENTER" dia bakal next kebawah
                         decoration: InputDecoration(hintText: "Email"),
                         validator: (value) {
                           RegExp regex = new RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"); //harus ada @, . , alphabet setelah titik
 
                           if (value.isEmpty) {
                             return ("Email is required");
@@ -104,11 +114,16 @@ class _AddUserState extends State<AddUser> {
                           emailController.text = value;
                         },
                       ),
+                      //-----------------------------------------------------------------//
+
                       TextFormField(
-                        autofocus: false,
+                        autofocus:
+                            false, //KALO DI ON dia bakal langsung di colomnya
                         controller: passwordController,
-                        obscureText: true,
-                        textInputAction: TextInputAction.next,
+                        obscureText:
+                            true, //ngehidden tulisan kita ketik jadi .....
+                        textInputAction: TextInputAction
+                            .next, //kalo tekan "ENTER" dia bakal next kebawah
                         decoration: const InputDecoration(hintText: "Password"),
                         validator: (value) {
                           RegExp regex = new RegExp(r'^.{6,}$');
@@ -128,7 +143,8 @@ class _AddUserState extends State<AddUser> {
                         },
                       ),
                       TextFormField(
-                        autofocus: false,
+                        autofocus:
+                            false, //KALO DI ON dia bakal langsung di colomnya
                         controller: confirmPasswordController,
                         obscureText: true,
                         validator: (value) {
@@ -170,11 +186,14 @@ class _AddUserState extends State<AddUser> {
                     final key = _formkey.currentState;
                     if (key.validate()) {
                       try {
+                        //daftar akun user ke "Authentication"
                         UserCredential result =
                             await _firebaseAuth.createUserWithEmailAndPassword(
                                 email: emailController.text,
                                 password: passwordController.text);
                         User user = result.user;
+                        //------------------------------//
+
                         await FirebaseFirestore.instance
                             .collection("users")
                             .doc(user.uid)
@@ -200,32 +219,6 @@ class _AddUserState extends State<AddUser> {
                           msg: "Please! Make sure theres no error.",
                           textColor: Colors.red);
                     }
-                    // if (_formkey.currentState.validate() == true) {
-                    //   AuthenticationService.signUp(
-                    //       emailController.text, passwordController.text).then((value) async {
-                    //         FirebaseUser user = await _auth.currentUser();
-
-                    //         if(emailController.text == EmailAuthProvider.getCredential(email: emailController.text)){
-                    //           Fluttertoast.showToast(msg: "email sama ... ganti yang lain");
-                    //         }else{
-                    //           Fluttertoast.showToast(msg: "email berhasil di daftarkan");
-                    //         }
-
-                    //         // await Firestore.instance.collection("users").document(user.uid).setData({
-                    //         //   'uid': user.uid,
-                    //         //   'email': emailController.text,
-                    //         //   'name': nameController.text,
-                    //         //   'password': passwordController.text,
-                    //         //   'timestamp': Timestamp.now(),
-                    //         // });
-                    //         // // _formkey.currentState.reset();
-                    //         // Navigator.pop(context);
-                    //         // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Account created successfully!"), backgroundColor: Colors.greenAccent, ));
-                    //       });
-                    // } else if (_formkey.currentState.validate() == false) {
-                    //   Fluttertoast.showToast(
-                    //       msg: "Make sure everything theres no error !", textColor: Colors.red);
-                    // }
                   },
                 ),
               ),

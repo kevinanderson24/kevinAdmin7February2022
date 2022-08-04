@@ -25,7 +25,6 @@ class _State extends State<UpdateProduct> {
   String fileName;
   CollectionReference products =
       FirebaseFirestore.instance.collection('product');
-  Product productModel;
 
   TextEditingController _nameProductController;
   TextEditingController _priceProductController;
@@ -153,12 +152,6 @@ class _State extends State<UpdateProduct> {
                   decoration: const InputDecoration(
                     label: Text('Product Id'),
                   ),
-                  // validator: (value) {
-                  //   if(value.isEmpty){
-                  //     return ("Id cannot be empty");
-                  //   }
-                  //   return null;
-                  // },
                   readOnly: true,
                   onSaved: (newValue) => _idProductController.text = newValue,
                 ),

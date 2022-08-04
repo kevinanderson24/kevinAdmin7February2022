@@ -1,8 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ebutler/Services/database_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthenticationService {
   static FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -26,11 +22,7 @@ class AuthenticationService {
       // print(user);
       UserCredential result =
           await _firebaseAuth.signInWithCredential(credentials);
-      await DatabaseServices(uid: result.user.uid).deleteUser();
       await result.user.delete();
-      // await DatabaseServices(uid: result.user.uid).deleteUser();
-      // await result.user.delete();
-
       return true;
     } catch (e) {
       print(e.toString());

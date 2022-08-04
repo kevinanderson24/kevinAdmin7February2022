@@ -22,7 +22,6 @@ class _ListUserState extends State<ListUser> {
       body: ListView(
         children: [
           Container(
-            // width: MediaQuery.of(context).size.width,
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('users')
@@ -34,7 +33,7 @@ class _ListUserState extends State<ListUser> {
                     child: CircularProgressIndicator(),
                   );
                 }
-
+                //KALO MISALKAN ADA DATA
                 return DataTable(
                   headingRowColor:
                       MaterialStateColor.resolveWith((states) => Colors.grey),
@@ -91,15 +90,20 @@ class _ListUserState extends State<ListUser> {
         child: IconButton(
           highlightColor: Colors.orange[100],
           splashColor: Colors.green[100],
-          onPressed: () async {
-            await AuthenticationService()
+          onPressed: () {
+            //DELETE user bagian "Authentication"
+            AuthenticationService()
                 .deleteUser(data['email'], data['password'])
                 .whenComplete(() {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text("User deleted successfully!"),
-                  backgroundColor: Colors.greenAccent));
+              //DELETE user bagian "Collection"
+              collectionReference.doc(data.id).delete().whenComplete(() {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("User deleted successfully!"),
+                    backgroundColor: Colors.greenAccent));
+              });
             });
           },
+          //icon keranjang delete warna merah
           icon: const Icon(
             Icons.delete,
             color: Colors.white,
@@ -109,8 +113,4 @@ class _ListUserState extends State<ListUser> {
       )),
     ]);
   }
-}
-
-class OrderBy {
-  String status;
 }

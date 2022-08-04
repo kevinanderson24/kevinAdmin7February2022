@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ebutler/model/product_model.dart';
-import 'package:ebutler/Services/database_services.dart';
 import 'package:ebutler/notifier/product_notifier.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -25,13 +24,13 @@ class _AddProductState extends State<AddProduct> {
   CollectionReference collectionReference =
       FirebaseFirestore.instance.collection('product');
   final TextEditingController nameController =
-      new TextEditingController(); //controller
+      TextEditingController(); //controller
   final TextEditingController priceController =
-      new TextEditingController(); //controller
+      TextEditingController(); //controller
   final TextEditingController descriptionController =
-      new TextEditingController(); //controller
+      TextEditingController(); //controller
   final TextEditingController idController =
-      new TextEditingController(); //controller
+      TextEditingController(); //controller
 
   File image;
   final imagePicker = ImagePicker();
@@ -55,15 +54,18 @@ class _AddProductState extends State<AddProduct> {
   //check form, make sure every field has been filled
   checkForm(BuildContext context) {
     final key = _formkey.currentState;
+    //SUDAH SUKSES
     if (key.validate() && image != null) {
       uploadImageToFirebaseStorage(context);
-    } else if (key.validate() == true && image == null) {
+    } //kalo validate BENAR, image SALAH
+    else if (key.validate() == true && image == null) {
       Fluttertoast.showToast(
         msg: "Image must be selected",
         textColor: Colors.red,
         gravity: ToastGravity.CENTER,
       );
-    } else {
+    } //image BENAR, validate SALAH / dua"nya SALAH
+    else {
       Fluttertoast.showToast(
         msg: "Please fill form field correctly! Make sure there's no error",
         textColor: Colors.red,
@@ -267,6 +269,7 @@ class _AddProductState extends State<AddProduct> {
                         ],
                       ),
                     ),
+                    //tombol "SUBMIT"
                     const SizedBox(height: 10),
                     Material(
                       elevation: 5,

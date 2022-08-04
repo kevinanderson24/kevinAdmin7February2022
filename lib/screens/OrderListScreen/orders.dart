@@ -38,16 +38,6 @@ class Orders extends StatelessWidget {
                 child: Text('Scheduled Order'),
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: ElevatedButton(
-            //     onPressed: () {
-            //       Navigator.of(context)
-            //           .pushNamed(ScheduledStatusScreen.routeName);
-            //     },
-            //     child: Text('Scheduled Status'),
-            //   ),
-            // ),
           ],
         ),
       ),
